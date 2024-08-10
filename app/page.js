@@ -1,4 +1,5 @@
-"use client";
+"se client";
+
 import { useState } from "react";
 import { Box, Stack, TextField, Button } from "@mui/material";
 
@@ -7,7 +8,7 @@ export default function Home() {
     {
       role: "assistant",
       content: "Hi, I`m Support Chat Agent, How Can I Assist you today? ",
-    },
+    }, 
   ]);
 
   const [message, setMessage] = useState("");
