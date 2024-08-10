@@ -2,6 +2,8 @@
 
 import { useState, useRef, useEffect } from "react";
 import { Box, Stack, TextField, Button } from "@mui/material";
+import ReactMarkdown from 'react-markdown';
+import { Typography } from '@mui/material';
 
 export default function ChatBot() {
   const [messages, setMessages] = useState([
@@ -98,7 +100,20 @@ export default function ChatBot() {
                 borderRadius={16}
                 p={3}
               >
-                {message.content}
+                <ReactMarkdown
+                  components={{
+                    p: ({ children }) => <Typography variant="body1">{children}</Typography>,
+                    strong: ({ children }) => <Typography variant="body1" component="span" fontWeight="bold">{children}</Typography>,
+                    em: ({ children }) => <Typography variant="body1" component="span" fontStyle="italic">{children}</Typography>,
+                    ul: ({ children }) => <Typography component="ul" style={{ paddingLeft: '20px', marginBottom: '8px' }}>{children}</Typography>,
+                    li: ({ children }) => <Typography component="li" variant="body2" style={{ marginBottom: '4px' }}>{children}</Typography>,
+                    h1: ({ children }) => <Typography variant="h4" gutterBottom>{children}</Typography>,
+                    h2: ({ children }) => <Typography variant="h5" gutterBottom>{children}</Typography>,
+                    h3: ({ children }) => <Typography variant="h6" gutterBottom>{children}</Typography>,
+                  }}
+                >
+                  {message.content}
+                </ReactMarkdown>
               </Box>
             </Box>
           ))}
