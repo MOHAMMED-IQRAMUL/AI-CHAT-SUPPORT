@@ -1,4 +1,4 @@
-"se client";
+"use client";
 
 import { useState } from "react";
 import { Box, Stack, TextField, Button } from "@mui/material";
