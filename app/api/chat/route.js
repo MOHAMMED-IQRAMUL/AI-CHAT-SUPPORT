@@ -13,51 +13,52 @@ const systemPrompt = `You are an AI-powered customer support assistant for HeadS
 
 Your goal is to provide accurate information, assist with common inquiries, and ensure a positive experience for all HeadStartAI users.`;
 
-
-
-
 export async function POST(req) {
-    const openai = new OpenAI({
-        baseURL: "https://openrouter.ai/api/v1",
-        apiKey: process.env.OPENAI_API_KEY,
+    if (!apiKey) {
+        return new NextResponse("API key is missing",apiKey, { status: 500 });
+    }
+  const openai = new OpenAI({
+    baseURL: "https://openrouter.ai/api/v1",
+    apiKey: process.env.OPENAI_API_KEY,
+  });
+
+  try {
+    const data = await req.json();
+    const completion = await openai.chat.completions.create({
+      messages: [
+        {
+          role: "system",
+          content: systemPrompt,
+        },
+        ...data,
+      ],
+      model: "meta-llama/llama-3.1-8b-instruct:free",
+      stream: true,
     });
 
-    try {
-        const data = await req.json();
-        const completion = await openai.chat.completions.create({
-            messages: [
-                {
-                    role: "system",
-                    content: systemPrompt,
-                },
-                ...data,
-            ],
-            model: "meta-llama/llama-3.1-8b-instruct:free",
-            stream: true,
-        });
+    const stream = new ReadableStream({
+      async start(controller) {
+        const encoder = new TextEncoder();
+        try {
+          for await (const chunk of completion) {
+            const content = chunk.choices[0].delta.content;
+            if (content) {
+              const text = encoder.encode(content);
+              controller.enqueue(text);
+            }
+          }
+        } catch (error) {
+          controller.error(error);
+        } finally {
+          controller.close();
+        }
+      },
+    });
 
-        const stream = new ReadableStream({
-            async start(controller) {
-                const encoder = new TextEncoder();
-                try {
-                    for await (const chunk of completion) {
-                        const content = chunk.choices[0].delta.content;
-                        if (content) {
-                            const text = encoder.encode(content);
-                            controller.enqueue(text);
-                        }
-                    }
-                } catch (error) {
-                    controller.error(error);
-                } finally {
-                    controller.close();
-                }
-            },
-        });
-
-        return new NextResponse(stream);
-
-    } catch (error) {
-        return new NextResponse("Error processing request: " + error.message, { status: 500 });
-    }
+    return new NextResponse(stream);
+  } catch (error) {
+    return new NextResponse("Error processing request: " + error.message, {
+      status: 500,
+    });
+  }
 }
