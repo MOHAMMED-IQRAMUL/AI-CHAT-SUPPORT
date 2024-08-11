@@ -9,21 +9,21 @@ export default function Home() {
       content: "Hi, I'm Support Chat Agent, How Can I Assist you today?",
     },
   ]);
-  
+
   const [message, setMessage] = useState("");
-  
+
   const sendMessage = async () => {
     if (!message.trim()) return; // Prevent sending empty messages
-  
+
     // Add user message to the chat
     setMessages((prevMessages) => [
       ...prevMessages,
       { role: "user", content: message },
     ]);
-  
+
     // Clear input field
     setMessage("");
-  
+
     try {
       const response = await fetch("/api/chat", {
         method: "POST",
@@ -32,48 +32,56 @@ export default function Home() {
         },
         body: JSON.stringify([...messages, { role: "user", content: message }]),
       });
-  
+
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
-  
+
       const reader = response.body.getReader();
       const decoder = new TextDecoder();
-  
+
       // Add a placeholder for the assistant's response
       setMessages((prevMessages) => [
         ...prevMessages,
         { role: "assistant", content: "" },
       ]);
-  
+      let accumulatedContent = "";
       while (true) {
         const { done, value } = await reader.read();
         if (done) break;
-  
+
         const chunk = decoder.decode(value, { stream: true });
-        
+        accumulatedContent += chunk;
+
         setMessages((prevMessages) => {
           const newMessages = [...prevMessages];
           const lastMessage = newMessages[newMessages.length - 1];
           if (lastMessage.role === "assistant") {
-            lastMessage.content += chunk;
+            return [
+              ...newMessages.slice(0, -1),
+              { ...lastMessage, content: accumulatedContent },
+            ];
           } else {
-            newMessages.push({ role: "assistant", content: chunk });
+            return [
+              ...newMessages,
+              { role: "assistant", content: accumulatedContent },
+            ];
           }
-          return newMessages;
         });
       }
     } catch (error) {
       console.error("Error:", error);
       setMessages((prevMessages) => [
         ...prevMessages,
-        { role: "assistant", content: "Sorry, there was an error. Please try again." },
+        {
+          role: "assistant",
+          content: "Sorry, there was an error. Please try again.",
+        },
       ]);
     }
   };
 
   return (
- 
     <div className="bg-gray-100 h-screen flex flex-col max-w-lg mx-auto">
       <div className="bg-blue-500 p-4 text-white flex justify-between items-center">
         <button id="login" className="hover:bg-blue-400 rounded-md p-1">
@@ -126,7 +134,10 @@ export default function Home() {
 
       <div className="flex-1 overflow-y-auto p-4">
         {messages.map((msg, index) => (
-          <div key={index} className={`flex ${msg.role === "user" ? "justify-end" : ""}`}>
+          <div
+            key={index}
+            className={`flex ${msg.role === "user" ? "justify-end" : ""}`}
+          >
             <div
               className={`${
                 msg.role === "user" ? "bg-blue-200" : "bg-gray-300"
