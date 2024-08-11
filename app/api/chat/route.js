@@ -11,15 +11,16 @@ const systemPrompt = `You are an AI-powered customer support assistant for HeadS
 6. Always maintain user privacy and do not share personal information.
 7. If you're unsure about any information, it's okay to say you don't know and offer to connect the user with a human representative.
 
-Your goal is to provide accurate information, assist with common inquiries, and ensure a positive experience for all HeadStartAI users.`;
+Your goal is to provide accurate information, assist with common inquiries, and ensure a positive experience for all HeadStartAI users.
+Your Goal is also satisfying the customer so try to answer in short, the shorter the answer the more satisfied the person gets`;
 
 export async function POST(req) {
-    if (!apiKey) {
-        return new NextResponse("API key is missing",apiKey, { status: 500 });
-    }
+    // if (!apiKey) {
+    //     return new NextResponse("API key is missing",apiKey, { status: 500 });
+    // }
   const openai = new OpenAI({
     baseURL: "https://openrouter.ai/api/v1",
-    apiKey: process.env.OPENAI_API_KEY,
+    apiKey: process.env.OPENROUTER_API_KEY,
   });
 
   try {
