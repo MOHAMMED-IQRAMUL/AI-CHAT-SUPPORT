@@ -11,7 +11,7 @@ export default function Signup() {
   const [password, setPassword] = useState("");
   const [error, setError] = useState(null);
   const router = useRouter();
-
+ 
   const handleSignup = async () => {
     try {
       await createUserWithEmailAndPassword(auth, email, password);

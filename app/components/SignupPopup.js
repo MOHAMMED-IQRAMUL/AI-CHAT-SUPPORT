@@ -1,5 +1,5 @@
 // components/SignupPopup.js
-import { useState } from 'react';
+
 import Signup from '../signup.js'; // Adjust the path based on your structure
 import { Box, Button } from '@mui/material';
 
@@ -11,7 +11,7 @@ export default function SignupPopup({ isOpen, onClose }) {
       display="flex" 
       justifyContent="center" 
       alignItems="center" 
-      position="fixed" 
+      position="fixed"  
       top={0} 
       left={0} 
       width="100%" 
