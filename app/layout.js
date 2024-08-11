@@ -5,8 +5,8 @@ import Typography from "@mui/material/Typography";
 import Link from "next/link";
 
 export const metadata = {
-  title: "Your App Name",
-  description: "Your App Description",
+  title: "AI Support Buddy",
+  description: "This is a AI Chat Support Assistant",
 };
 
 export default function RootLayout({ children }) {
@@ -16,7 +16,7 @@ export default function RootLayout({ children }) {
       <body>
         <header className="flex justify-between p-4 bg-gray-800 text-white">
           <Link href="/" className="text-xl font-bold">
-            <Typography variant="h6">Your App Name</Typography>
+            <Typography variant="h6">AI Support Buddy</Typography>
           </Link>
 
           <ProfileMenu />

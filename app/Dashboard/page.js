@@ -7,7 +7,7 @@ export default function Dashboard() {
   const [messages, setMessages] = useState([
     {
       role: "assistant",
-      content: "Hi, I'm Support Chat Agent, How Can I Assist you today?",
+      content: "Hi, I'm AI Support Buddy, How Can I Assist you today?",
     },
   ]);
 
@@ -83,7 +83,7 @@ export default function Dashboard() {
 
   return (
     <AuthLayout>
-      <div className="bg-gray-100 h-screen flex flex-col max-w-lg mx-auto">
+      <div className="bg-gray-100  max-h-screen flex flex-col max-w-lg mx-auto">
         <div className="bg-blue-500 p-4 text-white flex justify-between items-center">
           <button id="login" className="hover:bg-blue-400 rounded-md p-1">
             <svg
