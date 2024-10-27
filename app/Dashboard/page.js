@@ -4,6 +4,8 @@ import { useState } from "react";
 import AuthLayout from "../../client/auth/AuthLayout";
 
 export default function Dashboard() {
+
+  
   const [messages, setMessages] = useState([
     {
       role: "assistant",
