@@ -73,6 +73,6 @@ export function useAuth() {
   return { user, loading, error };
 }
 
-// Usage example of the useAuth hook (for reference only, not part of the 200 lines)
-// import { useAuth } from "./path/to/useAuth";
-// const { user, loading, error } = useAuth();
+
+
+
